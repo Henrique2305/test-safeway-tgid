@@ -17,7 +17,6 @@ public class EmpresaService {
     @Autowired
     private EmpresaRepository empresaRepository;
 
-
     public List<EmpresaDto> listAll() {
         return empresaRepository.findAll().stream()
                 .map(EmpresaDto::new)

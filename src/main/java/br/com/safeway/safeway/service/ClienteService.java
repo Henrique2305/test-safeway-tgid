@@ -29,10 +29,6 @@ public class ClienteService {
     }
 
     public ClienteDto save(CadastroEAtualizacaoClienteDto dto) {
-//        if (clienteRepository.existsByCPF(dto.CPF())) {
-//            throw new ValidacaoException("Cliente já cadastrado com este CPF");
-//        }
-
         Optional<Empresa> empresa = empresaRepository.findById(dto.idEmpresa());
 
         Cliente cliente = clienteRepository.save(new Cliente(dto, empresa.get()));

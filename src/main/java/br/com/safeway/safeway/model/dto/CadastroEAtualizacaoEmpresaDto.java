@@ -1,6 +1,5 @@
 package br.com.safeway.safeway.model.dto;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.br.CNPJ;
 

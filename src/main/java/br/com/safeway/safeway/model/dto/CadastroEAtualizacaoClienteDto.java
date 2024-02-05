@@ -1,6 +1,5 @@
 package br.com.safeway.safeway.model.dto;
 
-import br.com.safeway.safeway.model.Empresa;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

@@ -26,6 +26,9 @@ public class TransacaoImpl implements Transacao {
 
     @Override
     public void depositar(TransacaoDto dto) {
+        Alert trasactionAlert = new TransactionAlert();
+        Alert smsAlert = new SMSAlert();
+
         Optional<Cliente> cliente = clienteRepository.findById(dto.idCliente());
         Optional<Empresa> empresa = empresaRepository.findByCNPJ(dto.cnpj());
 
@@ -39,12 +42,15 @@ public class TransacaoImpl implements Transacao {
 
         System.out.println("Valor depositado: R$ " + dto.valor().setScale(2, RoundingMode.HALF_UP));
 
-        TransactionAlert.alert(Tipo.DEPOSITO, cliente.get().getNome(), empresa.get().getCNPJ(), dto.valor());
-        SMSAlert.alert(Tipo.DEPOSITO, cliente.get().getNome(), cliente.get().getCPF(), dto.valor());
+        trasactionAlert.alert(Tipo.DEPOSITO, cliente.get().getNome(), empresa.get().getCNPJ(), dto.valor());
+        smsAlert.alert(Tipo.DEPOSITO, cliente.get().getNome(), cliente.get().getCPF(), dto.valor());
     }
 
     @Override
     public void sacar(TransacaoDto dto) {
+        Alert trasactionAlert = new TransactionAlert();
+        Alert smsAlert = new SMSAlert();
+
         Optional<Cliente> cliente = clienteRepository.findById(dto.idCliente());
         Optional<Empresa> empresa = empresaRepository.findByCNPJ(dto.cnpj());
 
@@ -66,10 +72,12 @@ public class TransacaoImpl implements Transacao {
 
         empresaRepository.save(empresa.get());
 
-        System.out.println("Valor sacado: R$ " + valorCorrigido.setScale(2, RoundingMode.HALF_UP));
+        System.out.println("Valor sacado: R$ " + dto.valor().setScale(2, RoundingMode.HALF_UP));
+        System.out.println("Valor do saque com a taxa aplicada: R$ " +
+                valorCorrigido.setScale(2, RoundingMode.HALF_UP));
 
-        TransactionAlert.alert(Tipo.SACADO, cliente.get().getNome(), empresa.get().getCNPJ(), dto.valor());
-        SMSAlert.alert(Tipo.SACADO, cliente.get().getNome(), cliente.get().getCPF(), dto.valor());
+        trasactionAlert.alert(Tipo.SACADO, cliente.get().getNome(), empresa.get().getCNPJ(), dto.valor());
+        smsAlert.alert(Tipo.SACADO, cliente.get().getNome(), cliente.get().getCPF(), dto.valor());
     }
 
     private void validarValor(BigDecimal valor) {

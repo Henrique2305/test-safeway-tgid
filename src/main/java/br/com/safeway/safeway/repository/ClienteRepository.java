@@ -8,7 +8,4 @@ import java.util.Optional;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    boolean existsByCPF(String CPF);
-
-    Optional<Cliente> findByCPF(String CPF);
 }

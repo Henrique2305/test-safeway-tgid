@@ -1,7 +1,6 @@
 package br.com.safeway.safeway.model.dto;
 
 import br.com.safeway.safeway.model.Cliente;
-import br.com.safeway.safeway.model.Empresa;
 
 public record ClienteDto(
         Long id,
