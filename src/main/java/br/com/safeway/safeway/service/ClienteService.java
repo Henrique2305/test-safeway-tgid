@@ -6,7 +6,6 @@ import br.com.safeway.safeway.model.Empresa;
 import br.com.safeway.safeway.model.dto.CadastroEAtualizacaoClienteDto;
 import br.com.safeway.safeway.model.dto.ClienteDto;
 import br.com.safeway.safeway.repository.ClienteRepository;
-import br.com.safeway.safeway.repository.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private EmpresaRepository empresaRepository;
+    private EmpresaService empresaService;
 
     public List<ClienteDto> listAll() {
         return clienteRepository.findAll().stream()
@@ -29,7 +28,7 @@ public class ClienteService {
     }
 
     public ClienteDto save(CadastroEAtualizacaoClienteDto dto) {
-        Optional<Empresa> empresa = empresaRepository.findById(dto.idEmpresa());
+        Optional<Empresa> empresa = empresaService.findByIdRepository(dto.idEmpresa());
 
         Cliente cliente = clienteRepository.save(new Cliente(dto, empresa.get()));
         return new ClienteDto(cliente);
@@ -45,11 +44,15 @@ public class ClienteService {
         }
     }
 
+    public Optional<Cliente> findByIdRepository(Long id) {
+        return clienteRepository.findById(id);
+    }
+
     public ClienteDto fullUpdate(Long id, CadastroEAtualizacaoClienteDto dto) {
         Cliente cliente;
 
         if (clienteRepository.findById(id).isPresent()) {
-            Optional<Empresa> empresa = empresaRepository.findById(dto.idEmpresa());
+            Optional<Empresa> empresa = empresaService.findByIdRepository(dto.idEmpresa());
             cliente = clienteRepository.save(Cliente.mapper(id, dto, empresa.get()));
             return new ClienteDto(cliente);
         } else {

@@ -10,6 +10,7 @@ public record CadastroEAtualizacaoEmpresaDto(
         String razaoSocial,
         @CNPJ(message = "CNPJ inválido")
         String CNPJ,
-        BigDecimal saldo
+        BigDecimal saldo,
+        String taxa
 ) {
 }

@@ -1,15 +1,38 @@
 package br.com.safeway.safeway.model;
 
-public enum Taxa {
-    DEZ("10");
+import jakarta.persistence.*;
 
-    private final String valor;
+@Entity
+@Table(name = "taxas")
+public class Taxa {
 
-    Taxa(String number) {
-        this.valor = number;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Long idEmpresa;
+    private String taxa;
+
+    public Taxa() {
     }
 
-    public String getValor() {
-        return valor;
+    public Taxa(Long idEmpresa, String taxa) {
+        this.idEmpresa = idEmpresa;
+        this.taxa = taxa;
+    }
+
+    public String getTaxa() {
+        return taxa;
+    }
+
+    public void setTaxa(String taxa) {
+        this.taxa = taxa;
+    }
+
+    public Long getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Long idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
 }

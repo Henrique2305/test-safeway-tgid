@@ -1,6 +1,7 @@
 package br.com.safeway.safeway.service;
 
 import br.com.safeway.safeway.model.Tipo;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -11,8 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 public class TransactionAlert implements Alert {
 
-    public void alert(Tipo tipo, String cliente, String cnpj, BigDecimal valor) {
-        String webhookURL = "https://webhook.site/693c3bd7-bff9-4ba8-bf15-75c6971a17b8";
+    public void alert(Tipo tipo, String cliente, String cnpj, BigDecimal valor, String url) {
 
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
@@ -26,7 +26,7 @@ public class TransactionAlert implements Alert {
             requestBody.append("}");
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(webhookURL))
+                    .uri(URI.create(url))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(
                             requestBody.toString(),

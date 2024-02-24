@@ -2,9 +2,11 @@ package br.com.safeway.safeway.service;
 
 import br.com.safeway.safeway.exception.ValidacaoException;
 import br.com.safeway.safeway.model.Empresa;
+import br.com.safeway.safeway.model.Taxa;
 import br.com.safeway.safeway.model.dto.CadastroEAtualizacaoEmpresaDto;
 import br.com.safeway.safeway.model.dto.EmpresaDto;
 import br.com.safeway.safeway.repository.EmpresaRepository;
+import br.com.safeway.safeway.repository.TaxaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,9 @@ public class EmpresaService {
     @Autowired
     private EmpresaRepository empresaRepository;
 
+    @Autowired
+    private TaxaService taxaService;
+
     public List<EmpresaDto> listAll() {
         return empresaRepository.findAll().stream()
                 .map(EmpresaDto::new)
@@ -27,8 +32,11 @@ public class EmpresaService {
         if (empresaRepository.existsByCNPJ(dto.CNPJ())) {
             throw new ValidacaoException("Empresa já cadastrada com este CNPJ");
         }
-
         Empresa empresa = empresaRepository.save(new Empresa(dto));
+
+        Taxa taxa = new Taxa(empresa.getId(), dto.taxa());
+        taxaService.save(taxa);
+
         return new EmpresaDto(empresa);
     }
 
@@ -40,6 +48,10 @@ public class EmpresaService {
         } else {
             throw new ValidacaoException("ID inválido");
         }
+    }
+
+    public Optional<Empresa> findByIdRepository(Long id) {
+        return empresaRepository.findById(id);
     }
 
     public EmpresaDto fullUpdate(Long id, CadastroEAtualizacaoEmpresaDto dto) {
@@ -61,5 +73,13 @@ public class EmpresaService {
         } else {
             throw new ValidacaoException("ID inválido");
         }
+    }
+
+    public Optional<Empresa> findByCNPJ(String cnpj) {
+        return empresaRepository.findByCNPJ(cnpj);
+    }
+
+    public void saveRepository(Empresa empresa) {
+        empresaRepository.save(empresa);
     }
 }
